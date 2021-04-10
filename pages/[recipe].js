@@ -1,4 +1,5 @@
 import Head from "next/head"
+import marked from "marked"
 import { getAllRecipeNames, getRecipeData } from "../lib/recipes"
 
 export async function getStaticProps({ params }) {
@@ -21,11 +22,31 @@ export async function getStaticPaths() {
 
 export default function Recipe({ recipeData }) {
   return (
-    <div>
+    <div className="w-11/12 md:w-1/2 mx-auto">
       <Head>
         <title>{recipeData.name}</title>
       </Head>
-      <div>{recipeData.name}</div>
+      <main className="my-4 markdown flex flex-col">
+        <hr />
+        <div className="text-3xl text-blue-500 font-bold">
+          {recipeData.name}
+        </div>
+        <h4 className="text-xl mt-2 mb-2 font-bold">Ingredients</h4>
+        <div
+          className="marked list-disc"
+          dangerouslySetInnerHTML={{
+            __html: marked(recipeData.ingredients),
+          }}
+        />
+        <h4 className="text-xl mt-4 mb-2 font-bold">Method</h4>
+        <div
+          className="marked"
+          dangerouslySetInnerHTML={{
+            __html: marked(recipeData.method),
+          }}
+        />
+        <hr className="mt-4" />
+      </main>
     </div>
   )
 }
